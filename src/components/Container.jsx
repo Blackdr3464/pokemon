@@ -8,6 +8,7 @@ const Container = () => {
     const [offset, setOffset] = useState(20);
     const [loading, setLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [showUp, setShowUp] = useState(false);
 
     const [data, setData] = useState();
 
@@ -43,9 +44,31 @@ const Container = () => {
         setShowModal(false);
     };
 
+    useEffect(() => {
+        window.addEventListener('scroll', () => {
+            scrollY > 400 ? setShowUp(true) : setShowUp(false);
+        });
+    }, []);
+
+    const handleUp = () => {
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth',
+        });
+    };
+
     return (
         <div className='pt-20 px-12 py-7 relative'>
             <Header />
+            {showUp && (
+                <div
+                    onClick={handleUp}
+                    className='w-10 h-10 rounded-full bg-overlay fixed bottom-3 right-1 flex items-center justify-center cursor-pointer text-white text-xs'
+                >
+                    Up
+                </div>
+            )}
             <ul className='flex items-center justify-center text-base text-white'>
                 <li className='px-7 py-2 bg-teal-700 hover:bg-teal-500'>Hỏa</li>
                 <li className='px-7 py-2 bg-teal-700 hover:bg-teal-500'>Thổ</li>
@@ -56,7 +79,7 @@ const Container = () => {
                 <li className='px-3 py-2 bg-teal-700 hover:bg-teal-500'>Mộc</li>
             </ul>
 
-            <ul className='grid grid-cols-6 gap-3 mt-7 '>
+            <ul className='grid md:grid-cols-6 sm:grid-cols-4 grid-cols-2 gap-3 mt-7 '>
                 {pokemons.map((pokemon) => (
                     <li
                         key={pokemon.id}
